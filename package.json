@@ -1,0 +1,21 @@
+{
+  "name": "omaha-3d-print-server",
+  "version": "0.0.0",
+  "description": "The Omaha 3D Print server!",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "author": "",
+  "license": "WTFPL",
+  "devDependencies": {
+    "tap": "~0.4.9",
+    "supertest": "~0.12.0",
+    "superagent": "~0.18.0",
+    "request": "~2.34.0"
+  },
+  "dependencies": {
+    "omaha-3d-print-database": "~0.1.2",
+    "admesh-parser": "~1.0.0"
+  }
+}
