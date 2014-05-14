@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "omaha-3d-print-database": "~0.1.2",
-    "admesh-parser": "~1.0.0"
+    "admesh-parser": "~1.0.0",
+	"3d-print-price-calculator": "~0.0.1"
   }
 }
