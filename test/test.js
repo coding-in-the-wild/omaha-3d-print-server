@@ -4,10 +4,10 @@ var concat = require('concat-stream')
 var fs = require('fs')
 var newServer = require('../index.js')
 var Database = require('omaha-3d-print-database')
-var Admesh = require('../admesh.js')
+var Admesh = require('admesh-parser')
 
 //var pathToAdmesh = "/Users/josh/admesh-0.95/admesh"
-var pathToAdmesh = '"C:/Program Files (x86)/admesh/admesh.exe"'
+var pathToAdmesh = 'C:/Program Files (x86)/admesh/admesh.exe'
 
 test("The admesh data is saved to the database correctly", function(t) {
 	var db = Database()
