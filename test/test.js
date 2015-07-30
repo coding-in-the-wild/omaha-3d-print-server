@@ -4,17 +4,17 @@ var concat = require('concat-stream')
 var fs = require('fs')
 var newServer = require('../index.js')
 var Database = require('omaha-3d-print-database')
-var Admesh = require('../admesh.js')
+var Admesh = require('admesh-parser')
 
-var pathToAdmesh = "/Users/josh/admesh-0.95/admesh"
-
+//var pathToAdmesh = "/Users/josh/admesh-0.95/admesh"
+var pathToAdmesh = 'C:/Program Files (x86)/admesh/admesh.exe'
 
 test("The admesh data is saved to the database correctly", function(t) {
 	var db = Database()
 
 	var admesh = new Admesh(pathToAdmesh)
 
-	var fileStream = fs.createReadStream('./test/companion-cube-2.stl')
+	var fileStream = fs.createReadStream('./companion-cube-2.stl')
 
 	var server = newServer(db, admesh)
 
@@ -34,7 +34,9 @@ test("The admesh data is saved to the database correctly", function(t) {
 		db.get(hash, function(err, admeshData) {
 			t.notOk(err, 'no error pulling from db')
 			t.equals(typeof admeshData, 'object', 'admeshData is an object')
-			t.ok(admeshData && admeshData.volume > 94587 && admeshData.volume < 94588, 'The volume is correct')
+			//t.ok(admeshData && admeshData.volume > 94587 && admeshData.volume < 94588, 'The volume is correct')
+			t.ok(admeshData && admeshData.volume > 33.48 && admeshData.volume < 33.49, 'The volume is correct')
+			console.log("vol:",admeshData.volume)
 			t.end()
 		})
 

@@ -2,6 +2,7 @@ var http = require('http')
 var path = require('path')
 var crypto = require('crypto')
 var fs = require('fs')
+var getPrice = require('3d-print-price-calculator')
 
 var tmpdir = require('os').tmpdir()
 
@@ -21,18 +22,21 @@ module.exports = function server(db, admesh) {
 	function saveAdmeshDataToDatabase(hash, stlFilePath, cb) {
 		admesh(stlFilePath, function(err, admeshObject) {
 			if (err) {
-				cb(err)
+				cb(err, admeshObject)
 			} else {
-				db.insert(hash, admeshObject, cb)
+				db.insert(hash, admeshObject, function(err) {
+					cb(err, admeshObject)
+				})
 			}
 		})
 	}
 
 	return http.createServer(function(req, res) {
-		function sendResponseBack(hash) {
+		function sendResponseBack(hash, price) {
 			res.setHeader("Content-Type", "application/json");
 			res.end(JSON.stringify({
-				hash: hash
+				hash: hash,
+				price: price
 			}))
 		}
 
@@ -47,8 +51,14 @@ module.exports = function server(db, admesh) {
 		}).on('end', function() {
 			file.end(function(err) {
 				var hash = md5.digest('hex')
-				saveAdmeshDataToDatabase(hash, filePath, function() {
-					sendResponseBack(hash)
+				db.get(hash, function(err, result) {
+					if (typeof result === 'object') {
+						sendResponseBack(hash, getPrice({}, result))
+					} else {
+						saveAdmeshDataToDatabase(hash, filePath, function(err, obj) {
+							sendResponseBack(hash, getPrice({}, obj))
+						})
+					}
 				})
 			})
 		})
